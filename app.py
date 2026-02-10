@@ -1,72 +1,84 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import pymysql
-from confi import config
+from config import Config
+
 
 app = Flask(__name__)
-app.config.from_object(config)
-app.secret_key = app.config["SECRET_KEY"]
+app.config.from_object(Config)
 
-users = {}  #this will take one user in a session
-
+# MySQL connection function
 def get_db_connection():
     return pymysql.connect(
-        host= app.config["MY_HOST"],
-        user = app.config["MY_USER"],
-        password = app.config["MY_PASSWORD"],
-        database = app.config["MY_DATABSE"],
-        port = app.config["MY_PORT"]
+        host=app.config["DB_HOST"],
+        user=app.config["DB_USER"],
+        password=app.config["DB_PASSWORD"],
+        database=app.config["DB_NAME"],
+        cursorclass=pymysql.cursors.DictCursor
     )
 
-@app.route("/")
-def home():
-    return redirect(url_for("index"))
-
-@app.route("/index")
-def index():
-    return render_template("index.html")
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        u = request.form["username"]
-        p = request.form["password"]
-
-        if u in users:
-            return render_template("register.html", msg="User exists!")
-
-        users[u] = p
-        return redirect(url_for("login"))
-
-    return render_template("register.html")
-
-
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        u = request.form["username"]
-        p = request.form["password"]
+        username = request.form["username"]
+        password = request.form["password"]
 
-        if users.get(u) == p:
-            session["user"] = u
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        query = "SELECT * FROM users WHERE username=%s AND password=%s"
+        cursor.execute(query, (username, password))
+        user = cursor.fetchone()
+
+        conn.close()
+
+        if user:
+            session["user"] = user["username"]
             return redirect(url_for("dashboard"))
-
-        return render_template("login.html", msg="Invalid login!")
+        else:
+            return "Invalid username or password"
 
     return render_template("login.html")
 
 
 @app.route("/dashboard")
 def dashboard():
-    if "user" not in session:
-        return redirect(url_for("login"))
-    return render_template("dashboard.html", user=session["user"])
+    if "user" in session:
+        return render_template("dashboard.html", user=session["user"])
+    return redirect(url_for("login"))
 
 
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
+
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM users WHERE username=%s", (username,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            conn.close()
+            return "User already exists"
+
+        cursor.execute(
+            "INSERT INTO users (username, password) VALUES (%s, %s)",
+            (username, password)
+        )
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("login"))
+
+    return render_template("signup.html")
 
 
 if __name__ == "__main__":
