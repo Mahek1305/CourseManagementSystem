@@ -2,10 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import pymysql
 from config import Config
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManger, UserMixin, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.secret_key = app.config["SECRET_KEY"]
+
+# for providing better security to the session we use flask_login
+#LoginManger main object:
+red = LoginManger()
+red.init_app(app)
+red.login_view = "login" #If not logged in, redirect here
+
+#app.secret_key = app.config["SECRET_KEY"]
 
 
 def get_db_connection():
