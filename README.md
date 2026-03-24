@@ -1,15 +1,19 @@
-# Course Management System (CMS)
-This project is a basic Flask-based web application with user authentication.
+# Course Management System
 
-## Technologies Used
+A Flask-based web application for managing courses.
+
+## Features
+- User Authentication (Login/Signup)
+- Course Browsing
+- Enrollment System
+- Dashboard
+
+## Tech Stack
 - Python (Flask)
 - MySQL
-- HTML
-- Werkzeug
-- Git & GitHub
+- HTML, CSS
 
 ## How to Run
-1. Install required packages: `pip install flask pymysql werkzeug`
-2. Configure database details in `config.py`
-3. Run the app
-
+1. Install requirements
+2. Setup MySQL database
+3. Run app.py
