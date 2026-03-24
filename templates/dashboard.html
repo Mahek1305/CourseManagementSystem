@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/dashboard.css">
 </head>
+
 <body>
-    <h2>Welcome {{ user }}</h2>
-    <a href="/logout">Logout</a>
+
+<div class="navbar">
+    <h2>CMS</h2>
+    <div>
+        <a href="/courses">Courses</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="card">
+    <h1>Welcome, {{username}}</h1>
+</div>
+
+<div class="card">
+    <h2>My Courses</h2>
+
+    <div class="grid">
+        {% for c in courses %}
+        <div class="course-card">
+            <h3>{{c.course_name}}</h3>
+            <p>{{c.description}}</p>
+
+            <a class="btn" href="/course/{{c.course_id}}">
+                View Course
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 </body>
 </html>

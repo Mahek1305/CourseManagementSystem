@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Courses</title>
+    <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>All Courses</h2>
+    <a href="/dashboard">Dashboard</a>
+</div>
+
+<div class="card">
+    <h2>Available Courses</h2>
+
+    <div class="grid">
+        {% for c in courses %}
+        <div class="course-card">
+            <h3>{{ c.course_name }}</h3>
+            <p>{{ c.description }}</p>
+
+            <a class="btn" href="/enroll/{{ c.course_id }}">
+                Enroll
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not courses %}
+        <p>No courses available</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

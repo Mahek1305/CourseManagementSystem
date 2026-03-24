@@ -1,0 +1,77 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #0f172a;
+    color: white;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 30px;
+    background: #111827;
+}
+
+.navbar a {
+    color: #a78bfa;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+/* Cards */
+.card {
+    background: #1f2937;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px;
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.2);
+}
+
+/* Grid */
+.grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Course Card */
+.course-card {
+    background: #111827;
+    padding: 20px;
+    border-radius: 15px;
+    width: 280px;
+    transition: 0.3s;
+}
+
+.course-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #a78bfa;
+}
+
+.course-card h3 {
+    color: #c4b5fd;
+}
+
+.course-card p {
+    color: #9ca3af;
+}
+
+/* Buttons */
+.btn {
+    background: linear-gradient(45deg, #7c3aed, #9333ea);
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+iframe {
+    border-radius: 12px;
+}
